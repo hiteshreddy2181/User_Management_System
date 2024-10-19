@@ -10,12 +10,10 @@ const Start = () => {
   const { auth, fields } = useContext(AppContext);
   
   if (auth && fields.role) {
-    if (fields.role === 'client') {
-      return <Navigate to="/client-dashboard" />;
-    } else if (fields.role === 'recruiter') {
-      return <Navigate to="/recruiter-dashboard" />;
-    } else if (fields.role === 'jobseeker') {
-      return <Navigate to="/jobseeker-dashboard" />;
+    if (fields.role === 'student') {
+      return <Navigate to="/student-dashboard" />;
+    } else if (fields.role === 'admin') {
+      return <Navigate to="/admin-dashboard" />;
     }
   }
 
@@ -58,7 +56,7 @@ const Start = () => {
           }}
         >
           <Typography variant="h4" component="h1" gutterBottom>
-            Join With Us 👋
+            Welcome Back 👋
           </Typography>
           <Button
             type="button"
@@ -66,9 +64,9 @@ const Start = () => {
             variant="contained"
             color="primary"
             sx={{ mt: 3, mb: 2 }}
-            onClick={() => handleRoleSelect('client', 'login')}
+            onClick={() => handleRoleSelect('student', 'login')}
           >
-            Client
+            Login as Student
           </Button>
           <Button
             type="button"
@@ -76,19 +74,9 @@ const Start = () => {
             variant="contained"
             color="primary"
             sx={{ mt: 3, mb: 2 }}
-            onClick={() => handleRoleSelect('recruiter', 'login')}
+            onClick={() => handleRoleSelect('admin', 'login')}
           >
-            Recruiter
-          </Button>
-          <Button
-            type="button"
-            fullWidth
-            variant="contained"
-            color="primary"
-            sx={{ mt: 3, mb: 2 }}
-            onClick={() => handleRoleSelect('jobseeker', 'login')}
-          >
-            Job Seeker
+            Login as Admin
           </Button>
         </Box>
       </Container>

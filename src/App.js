@@ -1,29 +1,17 @@
 import React, { useContext } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-
 import AppContext from './Context/AppContext';
-import ClientAppBarComponent from './ClientComponent/ClientAppBarComponent/ClientAppBarComponent';
-import Loginn from './ClientComponent/Login/login';
-import Signup from './ClientComponent/Login/signup';
-import Start from './ClientComponent/Login/start';
+import Loginn from './StudentComponent/Login/login';
+import Start from './StudentComponent/Login/start';
 import RoleBasedRoute from './RoleBasedRoute';
-import PostRequirements from './ClientComponent/Requirements/Requirements';
-import ViewProfiles from './ClientComponent/ViewProfiles/ViewProfiles';
-import RecruiterLogin from './RecruiterComponent/Login/RecruiterLogin';
-import RecruiterRegister from './RecruiterComponent/Login/RecruiterRegister';
-import RecruiterAppBarComponent from './RecruiterComponent/RecruiterAppBar/RecruiterAppBarComponent';
-import ApplyForPosition from './RecruiterComponent/ApplyForPosition/ApplyForPosition';
-import StatusOfPosition from './RecruiterComponent/StatusOfPosition/StatusOfPosition';
+import RecruiterAppBarComponent from './AdminComponent/AdminAppBar/AdminAppBarComponent.js';
 import { ProtectedRoute } from './ProtectedRoute';
 import AppProvider from './Context/AppProvider';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Chat from './Chat/ChatWIndow.js';
-import JobSeekerAppbarComponent from './JobSeekerComponent/JobSeekerAppBar/JobSeekerAppbarComponent';
-import JobSeekerApplyForPosition from './JobSeekerComponent/JobSeekerApplyForPosition/JobSeekerApplyForPosition';
-import JobSeekerStatusOfPosition from './JobSeekerComponent/StatusOfPosition/JobSeekerStatusOfPosition';
-import JobSeekerLogin from './JobSeekerComponent/Login/JobSeekerLogin';
-import JobSeekerRegister from './JobSeekerComponent/Login/JobSeekerRegister';
-
+import StudentAppBarComponent from './StudentComponent/StudentAppBarComponent/StudentAppBarComponent.js';
+import AdminLogin from './AdminComponent/Login/AdminLogin.js'
+import StudentDashboard from './StudentComponent/Dashboard/Studentdashboard.js'
+import Admindashboard from './AdminComponent/Admindashboard/Admindashboard.js';
 
 const darkTheme = createTheme({
   palette: {
@@ -67,12 +55,10 @@ const App = () => {
   const { auth, fields } = useContext(AppContext);
   const RedirectToDashboard = () => {
     if (auth && fields.role) {
-      if (fields.role === 'client') {
-        return <Navigate to="/client-dashboard" />;
-      } else if (fields.role === 'recruiter') {
-        return <Navigate to="/recruiter-dashboard" />;
-      } else if (fields.role === 'jobseeker') {
-        return <Navigate to="/jobseeker-dashboard" />;
+      if (fields.role === 'student') {
+        return <Navigate to="/student-dashboard" />;
+      } else if (fields.role === 'admin') {
+        return <Navigate to="/admin-dashboard" />;
       }
     }
     return <Navigate to="/" />;
@@ -84,45 +70,26 @@ const App = () => {
         <Router>
           <Routes>
             <Route path="/" element={<Start />} />
-            <Route path="/client/login" element={<Loginn />} />
-            <Route path="/client/register" element={<Signup />} />
-            <Route path="/recruiter/login" element={<RecruiterLogin />} />
-            <Route path="/recruiter/register" element={<RecruiterRegister />} />
-            <Route path="/jobseeker/login" element={<JobSeekerLogin />} />
-            <Route path="/jobseeker/register" element={<JobSeekerRegister />} />
-            <Route path="/client-dashboard/*" element={
+            <Route path="/student/login" element={<Loginn />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/student-dashboard/*" element={
               <ProtectedRoute>
-                <RoleBasedRoute allowedRoles={['client']}>
-                  <ClientAppBarComponent />
+                <RoleBasedRoute allowedRoles={['student']}>
+                  <StudentAppBarComponent />
                 </RoleBasedRoute>
               </ProtectedRoute>
             }>
-              <Route path='view-profiles/Chat/:roomId' element={<Chat/>}/>
-              <Route path="post-requirements" element={<PostRequirements />} />
-              <Route path="view-profiles" element={<ViewProfiles />} />
+              <Route path="" element={<StudentDashboard />} />
               
             </Route>
-            <Route path="/recruiter-dashboard/*" element={
+            <Route path="/admin-dashboard/*" element={
               <ProtectedRoute>
-                <RoleBasedRoute allowedRoles={['recruiter']}>
+                <RoleBasedRoute allowedRoles={['admin']}>
                   <RecruiterAppBarComponent />
                 </RoleBasedRoute>
               </ProtectedRoute>
             }>
-              <Route path='status-of-positions/Chat/:roomId' element={<Chat/>}/>
-              <Route path="apply-for-positions" element={<ApplyForPosition />} />
-              <Route path="status-of-positions" element={<StatusOfPosition />} />
-            </Route>
-            <Route path="/jobseeker-dashboard/*" element={
-              <ProtectedRoute>
-                <RoleBasedRoute allowedRoles={['jobseeker']}>
-                  <JobSeekerAppbarComponent />
-                </RoleBasedRoute>
-              </ProtectedRoute>
-            }>
-              <Route path='status-of-positions-jobseeker/Chat/:roomId' element={<Chat/>}/>
-              <Route path="apply-for-positions-jobseeker" element={<JobSeekerApplyForPosition />} />
-              <Route path="status-of-positions-jobseeker" element={<JobSeekerStatusOfPosition />} />
+              <Route path="" element={<Admindashboard />} />
             </Route>
             <Route path="*" element={<RedirectToDashboard />} />
           </Routes>

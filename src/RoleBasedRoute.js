@@ -16,7 +16,7 @@ const RoleBasedRoute = ({ children, allowedRoles }) => {
   }
   console.log("*************************", allowedRoles.includes(fields.role))
   if (auth && !allowedRoles.includes(fields.role)) {
-    const dashboardPath = fields.role === 'client' ? '/client-dashboard' : fields.role === "jobseeker" ? '/jobseeker-dashboard' : '/recruiter-dashboard';
+    const dashboardPath = fields.role === 'student' ? '/student-dashboard' : '/admin-dashboard';
     console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%", dashboardPath)
     return <Navigate to={dashboardPath} state={{ from: location }} />;
   }

@@ -1,22 +1,19 @@
 import React, { useState, useContext } from 'react';
 import { Container, TextField, Button, Checkbox, FormControlLabel, Typography, Box, IconButton, GlobalStyles, Grid } from '@mui/material';
-import GoogleIcon from '@mui/icons-material/Google';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import RoleContext from '../../Context/RoleContext';
-import { recruiterLogin } from '../../services/recruitmentService';
+import { studentLogin } from '../../services/AuthService';
 import AppContext from '../../Context/AppContext';
-import Cookies from 'js-cookie';
 
 
-const RecruiterLogin = () => {
+const Loginn = () => {
   const navigate = useNavigate();
   const { role } = useContext(RoleContext);
-  console.log("role", role)
-  const [formData, setFormData] = useState({ email: '', password: '' });
-  const [agreeToTerms, setAgreeToTerms] = useState(false);
+  console.log("Inside Login COMPONENT-role------", role)
+  const [formData, setFormData] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
   const { setAuth, handleAccessToken } = useContext(AppContext);
   const theme = useTheme();
@@ -30,27 +27,18 @@ const RecruiterLogin = () => {
     }));
   };
 
-  const handleAgreeToTermsChange = (e) => setAgreeToTerms(e.target.checked);
-
-  const handleGoRegister = () => {
-    navigate('/recruiter/register');
-  };
-
   const handleLogin = async (e) => {
     e.preventDefault();
-    if (!agreeToTerms) {
-      setError('You must agree to the terms and conditions.');
-      return;
-    }
     formData["role"] = role
     try {
-      const response = await recruiterLogin(formData);
+      const response = await studentLogin(formData);
       console.log('Login successful:', response);
       if (response) {
         window.sessionStorage.setItem('token', response.token);
         await handleAccessToken(); // Fetch user details after setting the token
         setAuth(true);
-        navigate("/recruiter-dashboard");
+        console.log("ssssssssssss")
+        navigate("/student-dashboard");
     }
     } catch (error) {
       setError('Login failed. Please check your credentials and try again.');
@@ -105,9 +93,6 @@ const RecruiterLogin = () => {
           <Typography variant="h4" component="h1" gutterBottom>
             Welcome Back 👋
           </Typography>
-          <Typography variant="body1" gutterBottom>
-            We are happy to have you back
-          </Typography>
           {error && (
             <Typography variant="body2" color="error" gutterBottom>
               {error}
@@ -120,10 +105,10 @@ const RecruiterLogin = () => {
                   variant="outlined"
                   margin="normal"
                   fullWidth
-                  label="Email Address"
-                  name="email"
-                  type="email"
-                  value={formData.email}
+                  label="User Name"
+                  name="username"
+                  type="text"
+                  value={formData.username}
                   onChange={handleChange}
                   InputLabelProps={{ style: { color: '#8692A6' } }}
                   InputProps={{ style: { color: '#8692A6' } }}
@@ -170,12 +155,6 @@ const RecruiterLogin = () => {
                 />
               </Grid>
               <Grid item xs={12} sm={8}>
-                <FormControlLabel
-                  control={<Checkbox checked={agreeToTerms} onChange={handleAgreeToTermsChange} value="terms" color="primary" />}
-                  label={<Typography variant="body2" style={{ color: 'white' }}>I agree to terms & conditions</Typography>}
-                />
-              </Grid>
-              <Grid item xs={12} sm={8}>
                 <Button
                   type="submit"
                   fullWidth
@@ -186,38 +165,6 @@ const RecruiterLogin = () => {
                   Login
                 </Button>
               </Grid>
-              <Grid item xs={12} sm={8}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  color="primary"
-                  sx={{ mt: 1, mb: 2 }}
-                  onClick={handleGoRegister}
-                >
-                  Register
-                </Button>
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <Typography variant="body1" align="center" gutterBottom>
-                  Or
-                </Typography>
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  sx={{
-                    backgroundColor: 'black',
-                    color: 'white',
-                    '&:hover': {
-                      backgroundColor: '#333',
-                    },
-                  }}
-                  startIcon={<GoogleIcon />}
-                >
-                  Register with Google
-                </Button>
-              </Grid>
             </Grid>
           </form>
         </Box>
@@ -226,4 +173,4 @@ const RecruiterLogin = () => {
   );
 };
 
-export default RecruiterLogin;
+export default Loginn;

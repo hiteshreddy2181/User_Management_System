@@ -6,16 +6,15 @@ import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import RoleContext from '../../Context/RoleContext';
-import { clientLogin } from '../../services/AuthService';
+import { adminLogin } from '../../services/AdminService';
 import AppContext from '../../Context/AppContext';
-import Cookies from 'js-cookie';
 
 
-const Loginn = () => {
+const AdminLogin = () => {
   const navigate = useNavigate();
   const { role } = useContext(RoleContext);
-  console.log("Inside Login COMPONENT-role------", role)
-  const [formData, setFormData] = useState({ email: '', password: '' });
+  console.log("role", role)
+  const [formData, setFormData] = useState({ username: '', password: '' });
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [error, setError] = useState('');
   const { setAuth, handleAccessToken } = useContext(AppContext);
@@ -30,28 +29,17 @@ const Loginn = () => {
     }));
   };
 
-  const handleAgreeToTermsChange = (e) => setAgreeToTerms(e.target.checked);
-
-  const handleGoRegister = () => {
-    navigate('/client/register');
-  };
-
   const handleLogin = async (e) => {
     e.preventDefault();
-    if (!agreeToTerms) {
-      setError('You must agree to the terms and conditions.');
-      return;
-    }
     formData["role"] = role
     try {
-      const response = await clientLogin(formData);
+      const response = await adminLogin(formData);
       console.log('Login successful:', response);
       if (response) {
         window.sessionStorage.setItem('token', response.token);
         await handleAccessToken(); // Fetch user details after setting the token
         setAuth(true);
-        console.log("ssssssssssss")
-        navigate("/client-dashboard");
+        navigate("/admin-dashboard");
     }
     } catch (error) {
       setError('Login failed. Please check your credentials and try again.');
@@ -106,9 +94,6 @@ const Loginn = () => {
           <Typography variant="h4" component="h1" gutterBottom>
             Welcome Back 👋
           </Typography>
-          <Typography variant="body1" gutterBottom>
-            We are happy to have you back
-          </Typography>
           {error && (
             <Typography variant="body2" color="error" gutterBottom>
               {error}
@@ -121,10 +106,10 @@ const Loginn = () => {
                   variant="outlined"
                   margin="normal"
                   fullWidth
-                  label="Email Address"
-                  name="email"
-                  type="email"
-                  value={formData.email}
+                  label="User Name"
+                  name="username"
+                  type="text"
+                  value={formData.username}
                   onChange={handleChange}
                   InputLabelProps={{ style: { color: '#8692A6' } }}
                   InputProps={{ style: { color: '#8692A6' } }}
@@ -171,12 +156,6 @@ const Loginn = () => {
                 />
               </Grid>
               <Grid item xs={12} sm={8}>
-                <FormControlLabel
-                  control={<Checkbox checked={agreeToTerms} onChange={handleAgreeToTermsChange} value="terms" color="primary" />}
-                  label={<Typography variant="body2" style={{ color: 'white' }}>I agree to terms & conditions</Typography>}
-                />
-              </Grid>
-              <Grid item xs={12} sm={8}>
                 <Button
                   type="submit"
                   fullWidth
@@ -187,38 +166,6 @@ const Loginn = () => {
                   Login
                 </Button>
               </Grid>
-              <Grid item xs={12} sm={8}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  color="primary"
-                  sx={{ mt: 1, mb: 2 }}
-                  onClick={handleGoRegister}
-                >
-                  Register
-                </Button>
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <Typography variant="body1" align="center" gutterBottom>
-                  Or
-                </Typography>
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  sx={{
-                    backgroundColor: 'black',
-                    color: 'white',
-                    '&:hover': {
-                      backgroundColor: '#333',
-                    },
-                  }}
-                  startIcon={<GoogleIcon />}
-                >
-                  Register with Google
-                </Button>
-              </Grid>
             </Grid>
           </form>
         </Box>
@@ -227,4 +174,4 @@ const Loginn = () => {
   );
 };
 
-export default Loginn;
+export default AdminLogin;

@@ -28,7 +28,6 @@ import {
 import { mkConfig, generateCsv, download } from 'export-to-csv';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import axios from 'axios';
-import RecruiterBulkUpload from '../../BulkUpload/RecruiterBulkUpload';
 import { saveAs } from 'file-saver';
 
 const Example = () => {
@@ -58,64 +57,29 @@ const Example = () => {
             },
 
             {
-                accessorKey: 'positionName',
-                header: 'Position Name',
+                accessorKey: 'username',
+                header: 'User Name',
             },
             {
-                accessorKey: 'companyName',
-                header: 'Company Name',
+                accessorKey: 'firstname',
+                header: 'First Name',
             },
             {
-                accessorKey: 'technicalSkills',
-                header: 'Technical Skills',
+                accessorKey: 'lastname',
+                header: 'Last Name',
             },
             {
-                accessorKey: 'yearOfExperience',
-                header: 'Year of Experience',
+                accessorKey: 'role',
+                header: 'Role',
             },
             {
-                accessorKey: 'numberOfPositions',
-                header: 'Number of Positions',
+                accessorKey: 'dateOfAdmission',
+                header: 'Date of Admission',
             },
             {
-                accessorKey: 'location',
-                header: 'Location',
-            },
-            {
-                accessorKey: 'JD',
-                header: 'Job Description',
-                Cell: ({ row }) => (
-                    <Box>
-                        {row.original.JD ? (
-                            <Button
-                                variant='outlined'
-                                color='primary'
-                                onClick={() => handleDownload(row.original.JD)}
-                            >
-                                Download
-                            </Button>
-                        ) : (
-                            'No file uploaded'
-                        )}
-                    </Box>
-                ),
-            },
-            {
-                accessorKey: 'budget',
-                header: 'Budget',
-            },
-            {
-                accessorKey: 'workerType',
-                header: 'Worker Type',
-            },
-            {
-                accessorKey: 'workMode',
-                header: 'Work Mode',
-            },
-            {
-                accessorKey: 'status',
-                header: 'Status',
-            },
+                accessorKey: 'startDate',
+                header: 'Start Date',
+            }
         ],
         [],
     );
@@ -415,12 +379,6 @@ const Example = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
-            <RecruiterBulkUpload
-                bulkUploadOpen={bulkUploadOpen}
-                setBulkUploadOpen={setBulkUploadOpen}
-                handleBulkClose={handleBulkClose}
-                handleBulkOpen={handleBulkOpen}
-            />
         </>
     )
 };
@@ -446,9 +404,9 @@ function useGetUsers() {
 
 const queryClient = new QueryClient();
 
-const ApplyForPosition = () => (
+const Admindashboard = () => (
     <>
-        <Typography component={"div"} variant='h4' p={1} mt={2} fontWeight={"bold"}>Apply for positions</Typography>
+        <Typography>You are in Admin Dashboard !!!</Typography>
         <QueryClientProvider client={queryClient}>
             <Example />
         </QueryClientProvider>
@@ -457,4 +415,4 @@ const ApplyForPosition = () => (
 
 
 
-export default ApplyForPosition
+export default Admindashboard
