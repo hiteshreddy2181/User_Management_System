@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Container, TextField, Button, Checkbox, FormControlLabel, Typography, Box, IconButton, GlobalStyles, Grid } from '@mui/material';
+import { Container, TextField, Button, Typography, Box, IconButton, GlobalStyles, Grid } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
@@ -7,14 +7,13 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import RoleContext from '../../Context/RoleContext';
 import { studentLogin } from '../../services/AuthService';
 import AppContext from '../../Context/AppContext';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Loginn = () => {
   const navigate = useNavigate();
   const { role } = useContext(RoleContext);
-  console.log("Inside Login COMPONENT-role------", role)
   const [formData, setFormData] = useState({ username: '', password: '' });
-  const [error, setError] = useState('');
   const { setAuth, handleAccessToken } = useContext(AppContext);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -29,19 +28,18 @@ const Loginn = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    formData["role"] = role
+    formData['role'] = role;
     try {
       const response = await studentLogin(formData);
-      console.log('Login successful:', response);
       if (response) {
         window.sessionStorage.setItem('token', response.token);
-        await handleAccessToken(); // Fetch user details after setting the token
+        await handleAccessToken();
         setAuth(true);
-        console.log("ssssssssssss")
-        navigate("/student-dashboard");
-    }
+        toast.success('Login successful!'); // Show success toast
+        navigate('/student-dashboard');
+      }
     } catch (error) {
-      setError('Login failed. Please check your credentials and try again.');
+      toast.error('Login failed. Please check your credentials and try again.'); // Show error toast
     }
   };
 
@@ -51,6 +49,8 @@ const Loginn = () => {
 
   return (
     <>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
+
       <GlobalStyles
         styles={{
           html: { backgroundColor: '#202227' },
@@ -93,11 +93,6 @@ const Loginn = () => {
           <Typography variant="h4" component="h1" gutterBottom>
             Welcome Back 👋
           </Typography>
-          {error && (
-            <Typography variant="body2" color="error" gutterBottom>
-              {error}
-            </Typography>
-          )}
           <form onSubmit={handleLogin} style={{ width: '100%' }}>
             <Grid container justifyContent="center">
               <Grid item xs={12} sm={8}>

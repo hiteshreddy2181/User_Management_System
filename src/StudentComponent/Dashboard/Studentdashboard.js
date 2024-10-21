@@ -5,7 +5,7 @@ import { Typography } from '@mui/material'
 const Studentdashboard = () => {
   return (
     <>
-      <Typography>You are in Student Dashboard !!!</Typography>
+      <Typography sx={{}}><h2>You are in Student Dashboard !!!</h2></Typography>
     </>
   )
 }

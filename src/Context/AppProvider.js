@@ -4,10 +4,10 @@ import Cookies from 'js-cookie';
 import { getUserDetails } from "../services/AuthService";
 
 const initialState = {
-  "userid":"",
-  "name": "",
-  "email": "",
-  "role": ""
+  "USERNAME":"",
+  "FIRSTNAME": "",
+  "LASTNAME": "",
+  "ROLE": ""
 };
 
 const AppProvider = (props) => {
@@ -40,7 +40,7 @@ const AppProvider = (props) => {
   useEffect(() => {
     handleAccessToken();
   }, [handleAccessToken]);
-  console.log("fieldsssssssssssssssssssssssss", fields.role)
+  console.log("fieldsssssssssssssssssssssssss", fields.ROLE)
   return (
     <AppContext.Provider value={{ auth, setAuth, fields, handleAccessToken }}>
       {props.children}
