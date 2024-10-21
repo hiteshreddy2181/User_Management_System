@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Container, TextField, Button, Checkbox, FormControlLabel, Typography, Box, IconButton, GlobalStyles, Grid } from '@mui/material';
-import GoogleIcon from '@mui/icons-material/Google';
+import { Container, TextField, Button, Typography, Box, IconButton, GlobalStyles, Grid } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
@@ -8,16 +7,15 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import RoleContext from '../../Context/RoleContext';
 import { adminLogin } from '../../services/AdminService';
 import AppContext from '../../Context/AppContext';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AdminLogin = () => {
   const navigate = useNavigate();
   const { role } = useContext(RoleContext);
-  console.log("role", role)
   const [formData, setFormData] = useState({ username: '', password: '' });
-  const [agreeToTerms, setAgreeToTerms] = useState(false);
-  const [error, setError] = useState('');
   const { setAuth, handleAccessToken } = useContext(AppContext);
+  const [error,setError]= useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -31,18 +29,25 @@ const AdminLogin = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    formData["role"] = role
+    formData['role'] = role; // Set role in formData
     try {
       const response = await adminLogin(formData);
-      console.log('Login successful:', response);
-      if (response) {
+      console.log(response)
+      console.log(response.status)
+      if(response.status === 200){
         window.sessionStorage.setItem('token', response.token);
         await handleAccessToken(); // Fetch user details after setting the token
         setAuth(true);
+        toast.success('Login successful!');
         navigate("/admin-dashboard");
-    }
+      }
+      else{
+        toast.error('Login failed. Please check your credentials and try again.');
+        setError(true);
+        
+      }
     } catch (error) {
-      setError('Login failed. Please check your credentials and try again.');
+      toast.error('Login failed. Please check your credentials and try again.');
     }
   };
 
@@ -52,6 +57,8 @@ const AdminLogin = () => {
 
   return (
     <>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
+
       <GlobalStyles
         styles={{
           html: { backgroundColor: '#202227' },
@@ -94,11 +101,7 @@ const AdminLogin = () => {
           <Typography variant="h4" component="h1" gutterBottom>
             Welcome Back 👋
           </Typography>
-          {error && (
-            <Typography variant="body2" color="error" gutterBottom>
-              {error}
-            </Typography>
-          )}
+
           <form onSubmit={handleLogin} style={{ width: '100%' }}>
             <Grid container justifyContent="center">
               <Grid item xs={12} sm={8}>
@@ -139,7 +142,7 @@ const AdminLogin = () => {
                   value={formData.password}
                   onChange={handleChange}
                   InputLabelProps={{ style: { color: '#8692A6' } }}
-                  InputProps={{ style: { color: '#8692A6' } }}
+                  InputProps={{ style: { color: '#fff' } }}
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': {

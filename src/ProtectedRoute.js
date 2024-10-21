@@ -7,9 +7,8 @@ export const ProtectedRoute = ({ children }) => {
   const { auth } = useContext(AppContext);
 
   if (auth === null) {
-    return <Navigate to="/" replace />;
+    return <div>Loading...</div>; // or a spinner
   }
-
 
   return auth ? children : <Navigate to="/" />;
 };

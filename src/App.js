@@ -54,6 +54,7 @@ const darkTheme = createTheme({
 
 
 const App = () => {
+  
   const { auth, fields } = useContext(AppContext);
   const RedirectToDashboard = () => {
     if (auth && fields.role) {
@@ -68,7 +69,7 @@ const App = () => {
 
   return (
     <>
-    <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
+    <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} />
     <ThemeProvider theme={darkTheme}>
       <AppProvider>
         <Router>
@@ -78,7 +79,7 @@ const App = () => {
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/student-dashboard" element={
               <ProtectedRoute>
-                <RoleBasedRoute allowedRoles={['student']}>
+                <RoleBasedRoute allowedRoles={['student','studentadmin']}>
                   <StudentAppBarComponent />
                   <StudentDashboard/>
                 </RoleBasedRoute>
@@ -89,8 +90,9 @@ const App = () => {
             </Route>
             <Route path="/admin-dashboard" element={
               <ProtectedRoute>
-                <RoleBasedRoute allowedRoles={['admin']}>
+                <RoleBasedRoute allowedRoles={['admin','studentadmin']}>
                   <RecruiterAppBarComponent />
+                  <Admindashboard/>
                 </RoleBasedRoute>
               </ProtectedRoute>
             }>

@@ -31,12 +31,15 @@ const Loginn = () => {
     formData['role'] = role;
     try {
       const response = await studentLogin(formData);
-      if (response) {
+      if(response.status === 200){
         window.sessionStorage.setItem('token', response.token);
-        await handleAccessToken();
+        await handleAccessToken(); // Fetch user details after setting the token
         setAuth(true);
-        toast.success('Login successful!'); // Show success toast
-        navigate('/student-dashboard');
+        toast.success('Login successful!');
+        navigate("/student-dashboard");
+      }
+      else{
+        toast.error('Login failed. Please check your credentials and try again.');
       }
     } catch (error) {
       toast.error('Login failed. Please check your credentials and try again.'); // Show error toast
