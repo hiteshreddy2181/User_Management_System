@@ -290,7 +290,7 @@ function AdminAppBarComponent() {
             p: 4,
           }}
         >
-          <Typography variant="h6" component="h2">
+          <Typography variant="h6" component="h2" color={"#fff"}>
             Change Password
           </Typography>
           <TextField
